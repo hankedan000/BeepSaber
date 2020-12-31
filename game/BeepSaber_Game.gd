@@ -397,7 +397,7 @@ func _create_cut_rigid_body(_sign, cube : Spatial, cutplane : Plane, cut_distanc
 
 	# attach the sound effect only to one of the halfs; I attach them here so
 	# it gets deleted when the body is deleted later
-	if (_sign == 1):
+	if _sign == 1 and not Options.mute_cut_sound:
 		var snd = AudioStreamPlayer.new();
 		snd.stream = preload("res://game/data/beepcube_cut.ogg");
 		rigid_body_half.add_child(snd);
