@@ -379,11 +379,12 @@ func _create_cut_rigid_body(_sign, cube : Spatial, cutplane : Plane, cut_distanc
 	# Next we are adding a simple collision cube to the rigid body. Note that
 	# his is really just a very crude approximation of the actual cut geometry
 	# but for now it's enough to give them some physics behaviour
-	var coll = CollisionShape.new();
-	coll.shape = BoxShape.new();
-	coll.shape.extents = Vector3(0.25, 0.25, 0.125);
-	coll.look_at_from_position(-cutplane.normal*_sign*0.125, cutplane.normal, Vector3(0,1,0));
-	rigid_body_half.add_child(coll);
+	if Options.enable_cut_collisions:
+		var coll = CollisionShape.new();
+		coll.shape = BoxShape.new();
+		coll.shape.extents = Vector3(0.25, 0.25, 0.125);
+		coll.look_at_from_position(-cutplane.normal*_sign*0.125, cutplane.normal, Vector3(0,1,0));
+		rigid_body_half.add_child(coll);
 
 	# set a phyiscs material for some more bouncy behaviour
 	rigid_body_half.physics_material_override = load("res://game/BeepCube_Cut.phymat");
