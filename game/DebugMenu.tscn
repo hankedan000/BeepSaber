@@ -1,0 +1,127 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://OQ_Toolkit/OQ_UI2D/theme/oq_ui2d_standard.theme" type="Theme" id=1]
+[ext_resource path="res://game/DebugMenu.gd" type="Script" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0, 0, 0, 1 )
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.25098, 0.25098, 0.25098, 1 )
+
+[node name="DebugMenu" type="Panel"]
+margin_right = 938.0
+margin_bottom = 529.0
+theme = ExtResource( 1 )
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 20
+custom_constants/margin_top = 20
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 20
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 918.0
+margin_bottom = 509.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Title" type="Label" parent="Margin/VBox"]
+margin_right = 898.0
+margin_bottom = 33.0
+text = "DEBUG UI"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Scroll" type="ScrollContainer" parent="Margin/VBox"]
+margin_top = 37.0
+margin_right = 898.0
+margin_bottom = 489.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/bg = SubResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DebugItems" type="VBoxContainer" parent="Margin/VBox/Scroll"]
+margin_right = 898.0
+margin_bottom = 88.0
+size_flags_horizontal = 3
+
+[node name="CubeOptions" type="HBoxContainer" parent="Margin/VBox/Scroll/DebugItems"]
+margin_right = 898.0
+margin_bottom = 41.0
+
+[node name="Label" type="Label" parent="Margin/VBox/Scroll/DebugItems/CubeOptions"]
+margin_top = 4.0
+margin_right = 222.0
+margin_bottom = 37.0
+text = "Instant Kill Cubes"
+
+[node name="CubeInstantKill" type="CheckButton" parent="Margin/VBox/Scroll/DebugItems/CubeOptions"]
+margin_left = 226.0
+margin_right = 302.0
+margin_bottom = 41.0
+
+[node name="Label2" type="Label" parent="Margin/VBox/Scroll/DebugItems/CubeOptions"]
+margin_left = 306.0
+margin_top = 4.0
+margin_right = 530.0
+margin_bottom = 37.0
+text = "Disable Collisions"
+
+[node name="CubeNoCollisions" type="CheckButton" parent="Margin/VBox/Scroll/DebugItems/CubeOptions"]
+margin_left = 534.0
+margin_right = 610.0
+margin_bottom = 41.0
+
+[node name="BeatsAhead" type="HBoxContainer" parent="Margin/VBox/Scroll/DebugItems"]
+margin_top = 45.0
+margin_right = 898.0
+margin_bottom = 88.0
+
+[node name="Label" type="Label" parent="Margin/VBox/Scroll/DebugItems/BeatsAhead"]
+margin_top = 5.0
+margin_right = 160.0
+margin_bottom = 38.0
+text = "Beats Ahead"
+
+[node name="BeatsAheadIndicator" type="LineEdit" parent="Margin/VBox/Scroll/DebugItems/BeatsAhead"]
+margin_left = 164.0
+margin_right = 264.0
+margin_bottom = 43.0
+rect_min_size = Vector2( 100, 0 )
+
+[node name="BeatsAheadSlider" type="HSlider" parent="Margin/VBox/Scroll/DebugItems/BeatsAhead"]
+margin_left = 268.0
+margin_right = 898.0
+margin_bottom = 43.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = 1.0
+max_value = 20.0
+value = 1.0
+[connection signal="toggled" from="Margin/VBox/Scroll/DebugItems/CubeOptions/CubeInstantKill" to="." method="_on_CubeInstantKill_toggled"]
+[connection signal="toggled" from="Margin/VBox/Scroll/DebugItems/CubeOptions/CubeNoCollisions" to="." method="_on_CubeNoCollisions_toggled"]
+[connection signal="value_changed" from="Margin/VBox/Scroll/DebugItems/BeatsAhead/BeatsAheadSlider" to="." method="_on_BeatsAheadSlider_value_changed"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://game/BeepCube_Cut.material" type="Material" id=1]
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DLabel.tscn" type="PackedScene" id=2]
@@ -15,6 +15,7 @@
 [ext_resource path="res://game/background.tres" type="Texture" id=13]
 [ext_resource path="res://game/background_sky.tres" type="PanoramaSky" id=14]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_MixedRealityCapture.tscn" type="PackedScene" id=15]
+[ext_resource path="res://game/DebugMenu.tscn" type="PackedScene" id=16]
 
 [sub_resource type="Environment" id=1]
 background_mode = 3
@@ -159,8 +160,6 @@ material/0 = SubResource( 10 )
 
 [node name="MainMenu_OQ_UI2DCanvas" parent="." instance=ExtResource( 3 )]
 transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 1, 0, 1.5, -1 )
-editor_live_update = false
-transparent = false
 
 [node name="BeepSaberMainMenu" parent="MainMenu_OQ_UI2DCanvas" instance=ExtResource( 11 )]
 
@@ -201,6 +200,10 @@ font_color = Color( 1, 1, 1, 1 )
 background_color = Color( 0, 0, 0, 0 )
 transparent = true
 
+[node name="DebugCanvas" parent="." instance=ExtResource( 3 )]
+transform = Transform( -0.131573, 0, 1.99567, 0, 2, 0, -1.99567, 0, -0.131573, -2.25967, 1.47252, 0.931062 )
+
+[node name="DebugMenu" parent="DebugCanvas" instance=ExtResource( 16 )]
 [connection signal="area_entered" from="OQ_ARVROrigin/OQ_ARVRCamera/PlayerHead" to="." method="_on_PlayerHead_area_entered"]
 [connection signal="area_exited" from="OQ_ARVROrigin/OQ_ARVRCamera/PlayerHead" to="." method="_on_PlayerHead_area_exited"]
 [connection signal="area_entered" from="OQ_ARVROrigin/OQ_LeftController/LeftLightSaber" to="." method="_on_LeftLightSaber_area_entered"]

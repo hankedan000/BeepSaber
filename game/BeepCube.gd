@@ -15,6 +15,8 @@ var _mesh : Mesh = null;
 var _mat : SpatialMaterial = null;
 
 func _ready():
+	$CubeMeshOrientation/BeepCube_Area/CollisionShape.disabled = Options.cube_no_collisions
+	
 	_mesh = _mesh_instance.mesh;
 	_mat = _mesh_instance.mesh.surface_get_material(0);
 	# play the spawn animation when this cube enters the scene

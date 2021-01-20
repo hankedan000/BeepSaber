@@ -119,7 +119,6 @@ func _end_song_display():
 
 
 const beat_distance = 4.0;
-const beats_ahead = 4.0;
 const CUBE_DISTANCE = 0.5;
 const CUBE_ROTATIONS = [180, 0, 270, 90, -135, 135, -45, 45, 0];
 
@@ -193,6 +192,7 @@ func _process_map(dt):
 	if (_current_map == null):
 		return;
 
+	var beats_ahead = Options.beats_ahead
 	var current_time = song_player.get_playback_position();
 	var bps = _current_info._beatsPerMinute / 60.0;
 	var current_beat = current_time * bps;
@@ -466,8 +466,10 @@ func _cut_cube(controller : ARVRController, saber : Area, cube : Spatial):
 	
 	var controller_speed : Vector3 = (saber_end - saber_end_past) / (5*last_dt) + 0.2*(beat_distance *_current_info._beatsPerMinute / 60) * Vector3(0, 0, 1) # Account for inertial track speed
 	
-	_create_cut_rigid_body(-1, cube, cutplane, cut_distance, controller_speed);
-	_create_cut_rigid_body( 1, cube, cutplane, cut_distance, controller_speed);
+	# only spawn cut bodies if instant kill is 'off'
+	if not Options.cube_instant_kill:
+		_create_cut_rigid_body(-1, cube, cutplane, cut_distance, controller_speed);
+		_create_cut_rigid_body( 1, cube, cutplane, cut_distance, controller_speed);
 
 	# compute the angle between the cube orientation and the cut direction
 	var cut_direction_xy = -Vector3(controller_speed.x, controller_speed.y, 0.0).normalized();
