@@ -25,6 +25,8 @@ onready var highscore_keyboard := $Keyboard_highscore
 
 onready var online_search_keyboard := $Keyboard_online_search
 
+onready var fps_label = $OQ_ARVROrigin/OQ_ARVRCamera/PlayerHead/FPS_Label
+
 onready var cube_template = preload("res://game/BeepCube.tscn").instance();
 onready var wall_template = preload("res://game/Wall/Wall.tscn").instance();
 onready var cube_material_template = preload("res://game/BeepCube_new_material.material");
@@ -485,6 +487,9 @@ func _update_saber_end_variabless(dt):
 
 
 func _physics_process(dt):
+	if fps_label.visible:
+		fps_label.set_label_text("FPS: %d" % Engine.get_frames_per_second())
+	
 	if (vr.button_just_released(vr.BUTTON.ENTER)):
 		_transition_game_state(GameState.Paused)
 		show_pause_menu();
