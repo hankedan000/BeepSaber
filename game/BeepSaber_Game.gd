@@ -157,12 +157,15 @@ func continue_map():
 func start_map(info, map_data):
 	_current_map = map_data;
 	_current_info = info;
-	var snd_file = File.new()
-	snd_file.open(info._path + info._songFilename, File.READ) #works whether it's a resource or a file
-	var stream = AudioStreamOGGVorbis.new()
-	stream.data = snd_file.get_buffer(snd_file.get_len())
-	snd_file.close()
-	song_player.stream = stream;
+	if get_tree().is_network_server():
+		var snd_file = File.new()
+		snd_file.open(info._path + info._songFilename, File.READ) #works whether it's a resource or a file
+		$NetworkedGame.send_song_file(snd_file)
+		var stream = AudioStreamOGGVorbis.new()
+		stream.data = snd_file.get_buffer(snd_file.get_len())
+		snd_file.close()
+		song_player.stream = stream;
+		$NetworkedGame.rpc("send_map_info",info, map_data)
 	restart_map();
 
 
@@ -205,6 +208,7 @@ func show_pause_menu():
 	highscore_keyboard.visible = false;
 
 func _init_live_view():
+	$NetworkedGame.beep_saber = self
 	vr.vrCamera.current = false
 	$LiveViewCamera.current = true
 	$MainMenu_OQ_UI2DCanvas.hide()
@@ -514,7 +518,8 @@ func _process(delta):
 		"r_ctrl" : vr.rightController.global_transform,
 		"l_ctrl" : vr.leftController.global_transform,
 	}
-	$NetworkedGame.rpc_unreliable("update_player_info",player_info)
+	if get_tree().is_network_server():
+		$NetworkedGame.rpc_unreliable("update_player_info",player_info)
 	
 func _physics_process(dt):
 	if fps_label.visible:

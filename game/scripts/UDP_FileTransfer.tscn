@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://game/scripts/UDP_FileTransfer.gd" type="Script" id=1]
+
+[node name="UDP_FileTransfer" type="Node"]
+script = ExtResource( 1 )
