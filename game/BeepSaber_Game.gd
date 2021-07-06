@@ -203,6 +203,16 @@ func show_pause_menu():
 	$Settings_canvas.visible = false;
 	name_selector_canvas.visible = false;
 	highscore_keyboard.visible = false;
+
+func _init_live_view():
+	vr.vrCamera.current = false
+	$LiveViewCamera.current = true
+	$MainMenu_OQ_UI2DCanvas.hide()
+	$Online_library.hide()
+	$OQ_ARVROrigin/Feature_VRSimulator.active = false
+	$OQ_ARVROrigin/OQ_RightController/Feature_UIRayCast.hide()
+	$OQ_ARVROrigin/OQ_RightController/RightLightSaber.show()
+	$OQ_ARVROrigin/OQ_LeftController/LeftLightSaber.show()
 	
 # This function will transitioning the game from it's current state into
 # the provided 'next_state'.
@@ -499,7 +509,13 @@ func _update_saber_end_variabless(dt):
 	right_saber_end = right_controller.global_transform.origin + right_saber.global_transform.basis.y
 	last_dt = dt
 
-
+func _process(delta):
+	var player_info = {
+		"r_ctrl" : vr.rightController.global_transform,
+		"l_ctrl" : vr.leftController.global_transform,
+	}
+	$NetworkedGame.rpc_unreliable("update_player_info",player_info)
+	
 func _physics_process(dt):
 	if fps_label.visible:
 		fps_label.set_label_text("FPS: %d" % Engine.get_frames_per_second())
@@ -556,8 +572,11 @@ func _ready():
 	name_selector_canvas.visible = false;
 	show_menu();
 	
+	if not vr.inVR:
+		_init_live_view()
+	
 	_transition_game_state(GameState.MapSelection)
-
+	
 func update_cube_colors():
 	cube_left.update_color_only(COLOR_LEFT);
 	cube_right.update_color_only(COLOR_RIGHT);

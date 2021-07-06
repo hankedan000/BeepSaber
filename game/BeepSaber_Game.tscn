@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://game/floor.tscn" type="PackedScene" id=1]
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DLabel.tscn" type="PackedScene" id=2]
@@ -25,6 +25,7 @@
 [ext_resource path="res://game/HighscorePanel.tscn" type="PackedScene" id=23]
 [ext_resource path="res://game/Bomb/Bomb.tscn" type="PackedScene" id=24]
 [ext_resource path="res://game/ui/NameSelector/NameSelector.tscn" type="PackedScene" id=25]
+[ext_resource path="res://game/NetworkedGame.tscn" type="PackedScene" id=26]
 
 [sub_resource type="Environment" id=1]
 background_mode = 3
@@ -54,6 +55,7 @@ environment = SubResource( 1 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1 )
 
 [node name="OQ_ARVRCamera" parent="OQ_ARVROrigin" instance=ExtResource( 5 )]
+current = true
 far = 1024.0
 
 [node name="PlayerHead" type="Area" parent="OQ_ARVROrigin/OQ_ARVRCamera"]
@@ -179,6 +181,11 @@ transparent = true
 
 [node name="NameSelector" parent="NameSelector_Canvas" instance=ExtResource( 25 )]
 mouse_filter = 1
+
+[node name="NetworkedGame" parent="." instance=ExtResource( 26 )]
+
+[node name="LiveViewCamera" type="Camera" parent="."]
+transform = Transform( 0.927514, 0.0700585, -0.367164, -0.00145104, 0.982946, 0.18389, 0.373786, -0.170028, 0.911798, -1.4762, 1.75944, 3.51002 )
 [connection signal="area_entered" from="OQ_ARVROrigin/OQ_ARVRCamera/PlayerHead" to="." method="_on_PlayerHead_area_entered"]
 [connection signal="area_exited" from="OQ_ARVROrigin/OQ_ARVRCamera/PlayerHead" to="." method="_on_PlayerHead_area_exited"]
 [connection signal="area_entered" from="OQ_ARVROrigin/OQ_LeftController/LeftLightSaber" to="." method="_on_LeftLightSaber_area_entered"]
