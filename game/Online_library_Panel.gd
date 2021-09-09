@@ -2,6 +2,8 @@ extends Panel
 
 var song_data = []
 var current_list = 0
+# reference to the main main node (used for playing downloadable song previews)
+var main_menu_node = null
 # the next requestable pages for the current list; null if prev/next page is
 # not requestable (ie. reached end of the list)
 var prev_page_available = null
@@ -15,6 +17,7 @@ var downloading = []#[["name","version_info"]]
 onready var httpreq = HTTPRequest.new()
 onready var httpdownload = HTTPRequest.new()
 onready var httpcoverdownload = HTTPRequest.new()
+onready var httppreviewdownload = HTTPRequest.new()
 onready var placeholder_cover = preload("res://game/data/beepsaber_logo.png")
 onready var goto_maps_by = $gotoMapsBy
 onready var v_scroll = $ItemList.get_v_scroll()
@@ -66,6 +69,11 @@ func _ready():
 	httpcoverdownload.download_chunk_size = 65536
 	get_tree().get_root().add_child(httpcoverdownload)
 	httpcoverdownload.connect("request_completed",self,"_update_cover")
+	
+	httppreviewdownload.use_threads = true
+	httppreviewdownload.download_chunk_size = 65536
+	get_tree().get_root().add_child(httppreviewdownload)
+	httppreviewdownload.connect("request_completed",self,"_on_preview_download_completed")
 	
 	if keyboard != null:
 		keyboard.connect("text_input_enter",self,"_text_input_enter")
@@ -177,6 +185,7 @@ Difficulties:%s
 	
 	$TextureRect.texture = $ItemList.get_item_icon(index)
 
+	httppreviewdownload.request(selected_data['versions'][0]['previewURL'])
 
 func _on_download_button_up():
 	OS.request_permissions()
@@ -247,7 +256,15 @@ func _on_HTTPRequest_download_completed(result, response_code, headers, body):
 		
 	download_next()
 		
-
+func _on_preview_download_completed(result, response_code, headers, body):
+	if result == 0:
+		# request preview to be played by the main menu node
+		if main_menu_node != null:
+			main_menu_node.play_preview(
+				body, # song data buffer
+				0,    # start previous at time 0
+				-1,   # play preview song for entire duration
+				'mp3')# bsaver has all it's previews in mp3 format for now
 
 func _on_search_button_up():
 	keyboard.visible=true
